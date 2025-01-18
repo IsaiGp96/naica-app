@@ -1,74 +1,83 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import * as SplashScreen from "expo-splash-screen";
+import React, { useEffect } from "react";
+import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
+import useFonts from "../../hooks/useFonts"; // Ruta a tu archivo useFonts.ts
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+// Evita que la pantalla de carga se oculte automáticamente
+SplashScreen.preventAutoHideAsync();
 
 export default function HomeScreen() {
+  const fontsLoaded = useFonts();
+
+  // Espera a que las fuentes se carguen antes de renderizar
+  useEffect(() => {
+    if (fontsLoaded) {
+      // Oculta la pantalla de carga cuando las fuentes se han cargado
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    // Mientras se cargan las fuentes, se mantiene la pantalla de carga visible
+    return null;
+  }
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
+    <ImageBackground
+      source={require("../../assets/images/headerDestello.gif")}
+      style={styles.background}
+      imageStyle={{ ...styles.image, transform: [{ rotate: "180deg" }] }}
+    >
+      <View style={styles.container}>
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+          source={require("../../assets/images/naicaLogo.png")}
+          style={styles.logo}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+        <Text style={styles.text}>Lore</Text>
+        <View style={styles.separator} />
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
+  background: {
+    width: "100%",
+    height: "70%", // Make the image smaller
+    position: "absolute",
+    top: 0,
     left: 0,
-    position: 'absolute',
+  },
+  image: {
+    opacity: 0.5, // 50% opacity for headerDestello
+  },
+  container: {
+    flex: 1,
+    justifyContent: "flex-start", // Move content upwards
+    alignItems: "center",
+    paddingTop: 50, // Adjust top space as needed
+  },
+  logo: {
+    width: 330,
+    height: 330,
+    marginTop: -75,
+    marginBottom: 70,
+  },
+  text: {
+    color: "#fff",
+    fontSize: 38,
+    fontFamily: "MyCustomFont",
+    position: "absolute",
+    top: 215,
+    left: 30,
+  },
+  separator: {
+    width: "85%",
+    height: 1,
+    backgroundColor: "gray",
+    marginTop: 15,
+    position: "absolute",
+    top: 260,
+    left: 30,
   },
 });
