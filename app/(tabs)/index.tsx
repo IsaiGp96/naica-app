@@ -1,6 +1,14 @@
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
-import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  //PAPOI
+  ImageBackground,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import useFonts from "../../hooks/useFonts"; // Ruta a tu archivo useFonts.ts
 
 // Evita que la pantalla de carga se oculte automáticamente
@@ -28,14 +36,31 @@ export default function HomeScreen() {
       style={styles.background}
       imageStyle={{ ...styles.image, transform: [{ rotate: "180deg" }] }}
     >
-      <View style={styles.container}>
-        <Image
-          source={require("../../assets/images/naicaLogo.png")}
-          style={styles.logo}
-        />
-        <Text style={styles.text}>Lore</Text>
-        <View style={styles.separator} />
-      </View>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.container}>
+          <Image
+            source={require("../../assets/images/naicaLogo.png")}
+            style={styles.logo}
+          />
+          <Text style={styles.text}>Lore</Text>
+          <View style={styles.separator} />
+          <Text style={styles.normalText}>
+            Naica es conocida, aparte de la minería, como la capital de las
+            brujas. En este contexto nuestro protagonista, inspirado por las
+            leyendas urbanas, se acerca al pueblo para hacer una investigación
+            sobre el tema. En su travesia, al cruzar el monte de noche, se
+            encuentra con una bola de fuego navegando cerca de lo que parece una
+            entrada a una mina. Curioso, se acerca para tratar de filmarlo
+            cuando esta atraviesa la entrada de la mina, iluminando sus paredes
+            con un fuego azulado y misterioso, y al atravesar la boca de la
+            mina, esta se derrumba iniciando, así nuestro juego...
+          </Text>
+          <Image
+            source={require("../../assets/images/LoreImage.webp")}
+            style={styles.loreImage}
+          />
+        </View>
+      </ScrollView>
     </ImageBackground>
   );
 }
@@ -43,7 +68,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   background: {
     width: "100%",
-    height: "70%", // Make the image smaller
+    height: "100%", // Make the background cover the entire screen
     position: "absolute",
     top: 0,
     left: 0,
@@ -51,24 +76,28 @@ const styles = StyleSheet.create({
   image: {
     opacity: 0.5, // 50% opacity for headerDestello
   },
-  container: {
-    flex: 1,
+  scrollContainer: {
+    flexGrow: 1,
     justifyContent: "flex-start", // Move content upwards
     alignItems: "center",
     paddingTop: 50, // Adjust top space as needed
+  },
+  container: {
+    width: "100%",
+    alignItems: "center",
   },
   logo: {
     width: 330,
     height: 330,
     marginTop: -75,
-    marginBottom: 70,
+    marginBottom: 10, // Reduced bottom margin to move text upwards
   },
   text: {
     color: "#fff",
     fontSize: 38,
     fontFamily: "MyCustomFont",
     position: "absolute",
-    top: 215,
+    top: 155,
     left: 30,
   },
   separator: {
@@ -77,7 +106,21 @@ const styles = StyleSheet.create({
     backgroundColor: "gray",
     marginTop: 15,
     position: "absolute",
-    top: 260,
+    top: 210,
     left: 30,
+  },
+  normalText: {
+    color: "#fff",
+    fontSize: 18, // Increased font size
+    fontFamily: "MyCustomFont",
+    textAlign: "justify",
+    marginHorizontal: 30,
+    marginTop: -10, // Adjusted top margin to move text downwards
+    lineHeight: 24, // Increased line height for more spacing between lines
+  },
+  loreImage: {
+    width: 330,
+    height: 330,
+    marginTop: 20, // Adjusted top margin to move image downwards
   },
 });
