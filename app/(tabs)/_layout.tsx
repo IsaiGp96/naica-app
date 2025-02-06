@@ -6,7 +6,7 @@ import { HapticTab } from "@/components/HapticTab";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { Castle, ChartPie, LibraryBig } from "lucide-react-native"; // Importa los íconos necesarios
+import { Castle, ChartPie, Info, LibraryBig } from "lucide-react-native"; // Import the necessary icons
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -27,13 +27,13 @@ export default function TabLayout() {
         }),
       }}
     >
-      {/* Nuevo Tab: Wiki */}
+      {/* New Tab: Wiki */}
       <Tabs.Screen
         name="wiki"
         options={{
           title: "Wiki",
           tabBarIcon: ({ color }) => (
-            <LibraryBig size={28} color={color} /> // Nuevo icono (ejemplo: LibraryBig)
+            <LibraryBig size={28} color={color} /> // New icon (example: LibraryBig)
           ),
         }}
       />
@@ -43,7 +43,7 @@ export default function TabLayout() {
         options={{
           title: "Home",
           tabBarIcon: ({ color }) => (
-            <Castle size={28} color={color} /> // Icono para Home
+            <Castle size={28} color={color} /> // Icon for Home
           ),
         }}
       />
@@ -54,8 +54,17 @@ export default function TabLayout() {
         options={{
           title: "Explore",
           tabBarIcon: ({ color }) => (
-            <ChartPie size={28} color={color} /> // Icono para Explore
+            <ChartPie size={28} color={color} /> // Icon for Explore
           ),
+        }}
+      />
+
+      {/* Info Tab */}
+      <Tabs.Screen
+        name="info"
+        options={{
+          title: "Info",
+          tabBarIcon: ({ color }) => <Info size={28} color={color} />,
         }}
       />
     </Tabs>
