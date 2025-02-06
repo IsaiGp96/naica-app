@@ -55,8 +55,10 @@ const InfoTab = () => {
 
           {showMore && (
             <Text style={styles.extraText}>
-              Aquí hay más información que aparece al presionar el botón. Puedes
-              agregar más detalles aquí si lo deseas.
+              En Lanucz, creamos soluciones tecnológicas innovadoras que
+              transforman la interacción digital. Nos especializamos en IoT,
+              plataformas web y videojuegos, funsinando tecnología y creatividad
+              para ofrecer productos de alto impacto.
             </Text>
           )}
 
@@ -120,11 +122,10 @@ const styles = StyleSheet.create({
     fontFamily: "MyCustomFont",
   },
   header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
     color: "#fff",
+    fontSize: 26,
     fontFamily: "MyCustomFont",
+    marginTop: 15,
   },
   text: {
     fontSize: 16,
@@ -137,8 +138,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#B0E0E6",
     marginTop: 10,
-    textAlign: "center",
-    fontFamily: "MyCustomFont",
+    textAlign: "auto",
+    fontFamily: "Arial",
+    fontWeight: "600", // Semi-bold
   },
   button: {
     backgroundColor: "#0056b3", // Color más oscuro
