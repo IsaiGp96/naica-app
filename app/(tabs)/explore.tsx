@@ -1,129 +1,113 @@
-import { Image, Platform, StyleSheet } from "react-native";
-
-import { Collapsible } from "@/components/Collapsible";
-import { ExternalLink } from "@/components/ExternalLink";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import { IconSymbol } from "@/components/ui/IconSymbol";
-
+import * as SplashScreen from "expo-splash-screen";
+import React, { useEffect, useState } from "react";
+import { ImageBackground, StyleSheet, Text, View, ActivityIndicator, ScrollView } from "react-native";
+import useFonts from "../../hooks/useFonts";
+import { DynamicTable
+  
+ } from "@/components/DynamicTable";
 export default function TabTwoScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#000000", dark: "#000000" }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
+  const fontsLoaded = useFonts();
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Oculta la splash screen cuando se cargan las fuentes
+  useEffect(() => {
+    const prepare = async () => {
+      if (fontsLoaded) {
+        await SplashScreen.hideAsync();
       }
+    };
+    prepare();
+  }, [fontsLoaded]);
+
+  // Función para obtener los datos desde el endpoint
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch("http://10.1.124.175:3000/api/getDataFromFirebase");
+        if (!response.ok) {
+          throw new Error("Error al obtener los datos");
+        }
+        const json = await response.json();
+        setData(json);
+        console.log(json);
+      } catch (err: any) {
+        setError("Error: " + err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  return (
+    <ImageBackground
+      source={require("../../assets/images/headerDestello.gif")}
+      style={styles.background}
+      imageStyle={{ ...styles.image, transform: [{ rotate: "180deg" }] }}
     >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
-      <ThemedText>
-        This app includes example code to help you get started.
-      </ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          and{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{" "}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the
-          web version, press <ThemedText type="defaultSemiBold">w</ThemedText>{" "}
-          in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the{" "}
-          <ThemedText type="defaultSemiBold">@2x</ThemedText> and{" "}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to
-          provide files for different screen densities
-        </ThemedText>
-        <Image
-          source={require("@/assets/images/react-logo.png")}
-          style={{ alignSelf: "center" }}
-        />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText>{" "}
-          to see how to load{" "}
-          <ThemedText style={{ fontFamily: "SpaceMono" }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{" "}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook
-          lets you inspect what the user's current color scheme is, and so you
-          can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{" "}
-          <ThemedText type="defaultSemiBold">
-            components/HelloWave.tsx
-          </ThemedText>{" "}
-          component uses the powerful{" "}
-          <ThemedText type="defaultSemiBold">
-            react-native-reanimated
-          </ThemedText>{" "}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The{" "}
-              <ThemedText type="defaultSemiBold">
-                components/ParallaxScrollView.tsx
-              </ThemedText>{" "}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+      <View style={styles.container}>
+        <Text style={styles.text}>Stats</Text>
+        <View style={styles.separator} />
+        <View style={styles.dataContainer}>
+          {loading ? (
+            <ActivityIndicator size="large" color="#fff" />
+          ) : error ? (
+            <Text style={{ color: "red" }}>Error: {error}</Text>
+          ) : (
+            // Se renderiza la tabla dinámica con los datos obtenidos
+            <ScrollView>
+              <DynamicTable jsonData={data} />
+            </ScrollView>
+          )}
+        </View>
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: "#808080",
-    bottom: -90,
-    left: -35,
+  background: {
+    width: "100%",
+    height: "70%", // Mantiene el tamaño original
     position: "absolute",
+    top: 0,
+    left: 0,
   },
-  titleContainer: {
-    flexDirection: "row",
-    gap: 8,
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  text: {
+    color: "#fff",
+    fontSize: 38,
+    fontFamily: "MyCustomFont",
+    position: "absolute",
+    top: 115,
+    left: 30,
+  },
+  image: {
+    opacity: 0.5,
+  },
+  separator: {
+    width: "85%",
+    height: 1,
+    backgroundColor: "gray",
+    marginTop: 15,
+    position: "absolute",
+    top: 155,
+    left: 30,
+  },
+  dataContainer: {
+    flex: 1,
+    width: "90%",
+    marginTop: 200, // Ajusta según sea necesario para evitar solapamientos
+    backgroundColor: "transparent",
   },
 });
