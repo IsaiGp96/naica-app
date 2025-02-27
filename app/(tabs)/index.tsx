@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import useFonts from "../../hooks/useFonts"; // Ruta a tu archivo useFonts.ts
+import Comentarios from "@/components/Comments";
 
 // Evita que la pantalla de carga se oculte automáticamente
 SplashScreen.preventAutoHideAsync();
@@ -59,6 +60,7 @@ export default function HomeScreen() {
             source={require("../../assets/images/LoreImage.webp")}
             style={styles.loreImage}
           />
+          <Comentarios />
         </View>
       </ScrollView>
     </ImageBackground>
