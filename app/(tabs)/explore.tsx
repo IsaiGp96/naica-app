@@ -28,7 +28,7 @@ export default function TabTwoScreen() {
     try {
       console.log("Iniciando petición a la API");
       const response = await fetch(
-        `http://10.1.100.132:3000/api/getDataFromFirebase?timestamp=${new Date().getTime()}`,
+        `http://192.168.1.75:3000/api/getDataFromFirebase?timestamp=${new Date().getTime()}`,
         { cache: "no-store" }
       );
       if (!response.ok) {

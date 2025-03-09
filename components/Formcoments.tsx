@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import {
-  View,
+  ActivityIndicator,
+  Alert,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  Alert,
-  ActivityIndicator,
+  View,
 } from "react-native";
 
 const FormularioComentarios = () => {
@@ -17,7 +17,9 @@ const FormularioComentarios = () => {
 
   const enviarComentario = async () => {
     // Validación básica de campos
-    console.log("Usuario: " + username + " Email: " + email + " Comentario: " + comentario)
+    console.log(
+      "Usuario: " + username + " Email: " + email + " Comentario: " + comentario
+    );
     if (!username.trim() || !email.trim() || !comentario.trim()) {
       Alert.alert("Error", "Todos los campos son obligatorios.");
       return;
@@ -26,7 +28,7 @@ const FormularioComentarios = () => {
     setLoading(true);
     try {
       // Reemplaza la URL por el endpoint real de tu API
-      const response = await fetch("http://10.1.100.132:3000/api/addComment", {
+      const response = await fetch("http://192.168.1.75:3000/api/addComment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,7 +39,7 @@ const FormularioComentarios = () => {
           email,
         }),
       });
-      
+
       if (response.ok) {
         Alert.alert("Éxito", "Tu comentario fue enviado correctamente.");
         // Limpia los campos del formulario
