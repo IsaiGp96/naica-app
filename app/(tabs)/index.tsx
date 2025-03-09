@@ -33,7 +33,7 @@ export default function HomeScreen() {
 
   return (
     <ImageBackground
-      source={require("../../assets/images/headerDestello.gif")}
+      source={require("..//../assets/images/headerDestello.gif")}
       style={styles.background}
       imageStyle={{ ...styles.image, transform: [{ rotate: "180deg" }] }}
     >

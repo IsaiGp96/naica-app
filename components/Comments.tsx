@@ -9,8 +9,9 @@ import {
 } from "react-native";
 
 interface Comentario {
-  texto: string;
-  autor: string;
+  comentario: string;
+  username: string;
+  email:string
 }
 
 const Comentarios = () => {
@@ -19,10 +20,11 @@ const Comentarios = () => {
 
   useEffect(() => {
     // Reemplaza la URL por el endpoint real de tu API
-    fetch("http://10.1.124.217:3000/api/getDataFromFirebase")
+    fetch("http://10.1.124.202:3000/api/getCommentsFromFirebase")
       .then((response) => response.json())
       .then((data) => {
         // Asumiendo que 'data' es un arreglo de comentarios
+        console.log(data)
         setComentarios(data);
         setLoading(false);
       })
@@ -45,8 +47,8 @@ const Comentarios = () => {
       >
         {comentarios.map((comentario, index) => (
           <View key={index} style={styles.commentCard}>
-            <Text style={styles.commentText}>{comentario.texto}</Text>
-            <Text style={styles.commentAuthor}>- {comentario.autor}</Text>
+            <Text style={styles.commentText}>{comentario.comentario}</Text>
+            <Text style={styles.commentAuthor}>- {comentario.username}</Text>
           </View>
         ))}
       </ScrollView>

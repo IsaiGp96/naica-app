@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import useFonts from "../../hooks/useFonts";
+import FormularioComentarios from "@/components/Formcoments";
 
 // Evita que la pantalla de carga se oculte automáticamente
 SplashScreen.preventAutoHideAsync();
@@ -74,7 +75,7 @@ const InfoTab = () => {
           <Text style={styles.text}>Habla con nostros !</Text>
 
           {showMoreSecond && (
-            <Text style={styles.extraText}>Email: soporte@lanucz.com</Text>
+            <><FormularioComentarios /><Text style={styles.extraText}>Email: soporte@lanucz.com</Text></>
           )}
 
           <TouchableOpacity style={styles.button} onPress={handlePressSecond}>
@@ -83,6 +84,7 @@ const InfoTab = () => {
             </Text>
           </TouchableOpacity>
         </View>
+        {/* Formulario de comentarios */}
       </ScrollView>
     </ImageBackground>
   );
@@ -118,7 +120,7 @@ const styles = StyleSheet.create({
   },
   content: {
     marginTop: 20,
-    paddingHorizontal: 20,
+    paddingHorizontal: 40,
     fontFamily: "MyCustomFont",
   },
   header: {
@@ -154,6 +156,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  formContent: {
+    paddingHorizontal: 40,
+  }
 });
 
 export default InfoTab;
