@@ -1,3 +1,7 @@
+/* cspell:ignore pantalla carga oculte automáticamente usar cargar fuente personalizada fuentes estén cargadas mientras cargan mostramos Lógica descarga subsección mediante obtener imagen guardarla galería Destello Personajes protagonista curioso determinado cuenta armas habilidades extraordinarias ingenio observación Antagonista entidad oscura malévola habita profundidades manifiesta diferentes formas acechar obstaculizar naturaleza enigmática añade capa psicológico manteniendo jugador constante tensión Orbe fuego actúa inicio juego guiando hacia zona interés Representa entorno dominado oscuridad embargo propósito complejos */
+// cspell:ignore Cuando oculta cada Aquí puedes implementar llamada utilizando funcionalidad guardar personaje cuya escapar descubrir misterios rodean Aunque radica capacidad pueden aparentan Sección Niveles Nivel Descripción mecánicas movimiento escenario consiste suspendidas deben cruzarse cuidadosamente llegar Desafíos precisión saltos esencial caída reiniciar laberinto intrincado cristal gigantescos compuesto reflejan basados formaciones Naica distorsionar percepción añadiendo dificultad recorrido Encontrar orientación precisa memoria espacial acecha Plataformas falsas
+import * as FileSystem from "expo-file-system";
+import * as MediaLibrary from "expo-media-library";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
 import {
@@ -5,6 +9,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import useFonts from "../../hooks/useFonts";
@@ -30,6 +35,29 @@ export default function WikiScreen() {
   if (!fontsLoaded) {
     return null;
   }
+  const downloadImage = async (object: string) => {
+    // Replace the URL with the actual image URL for the given object
+    const uri = `http://192.168.1.75:3000/api/getImageFromBackend/${object}`;
+    const fileUri = FileSystem.documentDirectory + `${object}.png`;
+    try {
+      const { uri: localUri } = await FileSystem.downloadAsync(uri, fileUri);
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status === "granted") {
+        const asset = await MediaLibrary.createAssetAsync(localUri);
+        await MediaLibrary.createAlbumAsync("Download", asset, false);
+        console.log(`Image downloaded and saved: ${localUri}`);
+      } else {
+        console.error("Permission to access media library was denied");
+      }
+    } catch (error) {
+      console.error("Error downloading image:", error);
+    }
+  };
+
+  const handleDownload = (section: string) => {
+    console.log(`Downloading objects for ${section}`);
+    // Aquí puedes implementar la llamada a la API utilizando fetch y la funcionalidad para guardar en galería.
+  };
 
   return (
     <ImageBackground
@@ -68,7 +96,7 @@ export default function WikiScreen() {
             </Text>
           </View>
 
-          {/* Nueva sección de Niveles */}
+          {/* Sección de Niveles */}
           <View style={styles.content}>
             <Text style={styles.header}>Niveles</Text>
             <Text style={styles.subheader}>Nivel 1: Parkour</Text>
@@ -104,6 +132,138 @@ export default function WikiScreen() {
               a pequeños detalles y utilizar la ayuda del Orbe de fuego para
               evitar errores.
             </Text>
+          </View>
+
+          {/* Sección de Objetos */}
+          <View style={styles.content}>
+            <Text style={styles.header}>Objetos</Text>
+            {/* Objeto Principal */}
+            <Text style={styles.subheader}>Objeto Principal</Text>
+            <Text style={styles.text}>
+              Descripción: Se refiere a aquellos que son esenciales para
+              terminar el juego.
+            </Text>
+
+            {/* Botones adicionales para Objeto Principal */}
+            <Text style={styles.text}>
+              Libro: Un libro que contiene secretos de la cueva.
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => downloadImage("book")}
+            >
+              <Text style={styles.buttonText}>Descargar Modelo Libro</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.text}>
+              Identificación: Una misteriosa identificación encontrada dentro de
+              la cueva
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => downloadImage("identification")}
+            >
+              <Text style={styles.buttonText}>
+                Descargar Modelo Identificación
+              </Text>
+            </TouchableOpacity>
+
+            <Text style={styles.text}>
+              Lámpara: Una lámpara que ilumina el camino en la oscuridad.
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => downloadImage("lamp")}
+            >
+              <Text style={styles.buttonText}>Descargar Modelo Lámpara</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.text}>
+              Pico: Un objeto que parece ser usado hace tiempo.
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => downloadImage("pickaxe")}
+            >
+              <Text style={styles.buttonText}>Descargar Modelo Pico</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.text}>
+              Carrete: Un simple carrete de un detonador.
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => downloadImage("spool")}
+            >
+              <Text style={styles.buttonText}>Descargar Modelo Carrete</Text>
+            </TouchableOpacity>
+
+            {/* Objeto de Historia */}
+            <Text style={styles.subheader}>Objeto de Historia</Text>
+            <Text style={styles.text}>
+              Descripción: Los objetos que le ayudan al protagonista a descubrir
+              la verdad.
+            </Text>
+            {/* Lista de objetos */}
+            {/* Objeto 1: Camara */}
+            <Text style={styles.text}>Cámara: Una cámara usada.</Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => downloadImage("camera")}
+            >
+              <Text style={styles.buttonText}>Descargar Modelo Cámara</Text>
+            </TouchableOpacity>
+            {/* Objeto 2: Jaula de pájaros */}
+            <Text style={styles.text}>
+              Jaula de pájaros: Resguarda la libertad del protagonista.
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => downloadImage("bird_cage")}
+            >
+              <Text style={styles.buttonText}>
+                Descargar Modelo Jaula de pájaros
+              </Text>
+            </TouchableOpacity>
+            {/* Objeto 3: Detonador */}
+            <Text style={styles.text}>
+              Detonador: Un objeto que se ha usado aqui hace tiempo.
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => downloadImage("detonator")}
+            >
+              <Text style={styles.buttonText}>Descargar Modelo Detonador</Text>
+            </TouchableOpacity>
+
+            {/* Objeto de Apoyo */}
+            <Text style={styles.subheader}>Objeto de Apoyo</Text>
+            <Text style={styles.text}>
+              Descripción: Ítems que otorgan energía y extienden la duración.
+            </Text>
+            {/* Pequeña descripción para Batería */}
+            <Text style={styles.text}>
+              Batería: Proporciona energía esencial para nuestra lampara.
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => downloadImage("battery")}
+            >
+              <Text style={styles.buttonText}>Descargar Modelo Batería</Text>
+            </TouchableOpacity>
+            {/* Pequeña descripción para Tanque de Oxígeno */}
+            <Text style={styles.text}>
+              Tanque de Oxígeno: Incrementa la reserva vital para continuar
+              explorando.
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => downloadImage("oxygen-tank")}
+            >
+              <Text style={styles.buttonText}>
+                Descargar Modelo Tanque de Oxígeno
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -168,6 +328,20 @@ const styles = StyleSheet.create({
     color: "#fff",
     marginTop: 5,
     lineHeight: 22,
+    fontFamily: "MyCustomFont",
+  },
+  button: {
+    backgroundColor: "#4682B4",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 5,
+    marginTop: 5,
+    marginBottom: 10,
+    alignSelf: "flex-start",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
     fontFamily: "MyCustomFont",
   },
 });
