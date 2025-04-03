@@ -23,7 +23,7 @@ const Comentarios = () => {
   const windowWidth = Dimensions.get("window").width;
 
   useEffect(() => {
-    fetch("http://192.168.1.75:3000/api/getCommentsFromFirebase")
+    fetch("https://backpwa-a0yz.onrender.com/api/getCommentsFromFirebase")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   carouselContainer: {
     height: 200,
     marginVertical: 20,
+    marginBottom: 100
   },
   title: {
     fontSize: 20,

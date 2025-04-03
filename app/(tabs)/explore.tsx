@@ -28,7 +28,7 @@ export default function TabTwoScreen() {
     try {
       console.log("Iniciando petición a la API");
       const response = await fetch(
-        `http://192.168.1.75:3000/api/getDataFromFirebase?timestamp=${new Date().getTime()}`,
+        `https://backpwa-a0yz.onrender.com/api/getDataFromFirebase?timestamp=${new Date().getTime()}`,
         { cache: "no-store" }
       );
       if (!response.ok) {
@@ -87,57 +87,59 @@ export default function TabTwoScreen() {
   }
 
   return (
-    <ImageBackground
-      source={require("../../assets/images/headerDestello.gif")}
-      style={styles.background}
-      imageStyle={{ ...styles.image, transform: [{ rotate: "180deg" }] }}
-    >
-      <View style={styles.container}>
-        <Text style={styles.text}>Stats</Text>
-        <View style={styles.separator} />
-        <View style={styles.dataContainer}>
-          {loading ? (
-            <ActivityIndicator size="large" color="#fff" />
-          ) : (
-            <View style={{ flex: 1 }}>
-              <ScrollView
-                ref={scrollViewRef}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                    tintColor="#000" // Color para iOS
-                    colors={["#000"]} // Color para Android
-                  />
-                }
-                onScroll={handleScroll}
-                scrollEventThrottle={16}
-                alwaysBounceVertical={true}
-                contentContainerStyle={{ flexGrow: 1 }}
-              >
-                {error && <Text style={styles.errorText}>{error}</Text>}
-                <DynamicTable jsonData={data} />
-              </ScrollView>
-              {showScrollToTop && (
-                <TouchableOpacity
-                  style={styles.scrollToTop}
-                  onPress={scrollToTop}
+    <>
+      <ImageBackground
+        source={require("../../assets/images/headerDestello.gif")}
+        style={styles.background}
+        imageStyle={{ ...styles.image, transform: [{ rotate: "180deg" }] }}
+      >
+      </ImageBackground>
+        <View style={styles.container}>
+          <Text style={styles.text}>Stats</Text>
+          <View style={styles.separator} />
+          <View style={styles.dataContainer}>
+            {loading ? (
+              <ActivityIndicator size="large" color="#fff" />
+            ) : (
+              <View style={{ flex: 1 }}>
+                <ScrollView
+                  ref={scrollViewRef}
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                      tintColor="#000" // Color para iOS
+                      colors={["#000"]} // Color para Android
+                    />
+                  }
+                  onScroll={handleScroll}
+                  scrollEventThrottle={16}
+                  alwaysBounceVertical={true}
+                  contentContainerStyle={{ flexGrow: 1 }}
                 >
-                  <Ionicons name="arrow-up" size={24} color="#000" />
-                </TouchableOpacity>
-              )}
-            </View>
-          )}
+                  {error && <Text style={styles.errorText}>{error}</Text>}
+                  <DynamicTable jsonData={data} />
+                </ScrollView>
+                {showScrollToTop && (
+                  <TouchableOpacity
+                    style={styles.scrollToTop}
+                    onPress={scrollToTop}
+                  >
+                    <Ionicons name="arrow-up" size={24} color="#000" />
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
+          </View>
         </View>
-      </View>
-    </ImageBackground>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   background: {
     width: "100%",
-    height: "100%", // se ajusta para que la tabla se vea en vertical completa
+    height: "70%", // se ajusta para que la tabla se vea en vertical completa
     position: "absolute",
     top: 0,
     left: 0,
@@ -169,7 +171,7 @@ const styles = StyleSheet.create({
   },
   dataContainer: {
     flex: 1,
-    width: "90%",
+    width: "95%",
     marginTop: 200,
     backgroundColor: "transparent",
   },

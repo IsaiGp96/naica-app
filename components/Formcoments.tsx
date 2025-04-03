@@ -101,6 +101,8 @@ const FormularioComentarios = () => {
 
 const styles = StyleSheet.create({
   container: {
+
+    width: 330,
     marginVertical: 20,
     padding: 20,
     backgroundColor: "#fff",

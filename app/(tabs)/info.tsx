@@ -41,11 +41,14 @@ const InfoTab = () => {
   };
 
   return (
-    <ImageBackground
-      source={require("../../assets/images/headerDestello.gif")}
-      style={styles.background}
-      imageStyle={{ ...styles.image, transform: [{ rotate: "180deg" }] }}
-    >
+    <>
+      <ImageBackground
+        source={require("../../assets/images/headerDestello.gif")}
+        style={styles.background}
+        imageStyle={{ ...styles.image, transform: [{ rotate: "180deg" }] }}
+      >
+
+      </ImageBackground>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>Information</Text>
         <View style={styles.separator} />
@@ -72,7 +75,7 @@ const InfoTab = () => {
 
         <View style={styles.content}>
           <Text style={styles.header}>Contactanos</Text>
-          <Text style={styles.text}>Habla con nostros !</Text>
+          <Text style={styles.text}>Habla con nosotros !</Text>
 
           {showMoreSecond && (
             <><FormularioComentarios /><Text style={styles.extraText}>Email: soporte@lanucz.com</Text></>
@@ -86,7 +89,7 @@ const InfoTab = () => {
         </View>
         {/* Formulario de comentarios */}
       </ScrollView>
-    </ImageBackground>
+    </>
   );
 };
 
@@ -107,7 +110,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 38,
     fontFamily: "MyCustomFont",
-    marginTop: 115,
+    marginTop: 40,
   },
   image: {
     opacity: 0.5,

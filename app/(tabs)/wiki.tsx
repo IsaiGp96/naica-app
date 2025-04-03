@@ -37,7 +37,7 @@ export default function WikiScreen() {
   }
   const downloadImage = async (object: string) => {
     // Replace the URL with the actual image URL for the given object
-    const uri = `http://192.168.1.75:3000/api/getImageFromBackend/${object}`;
+    const uri = `https://backpwa-a0yz.onrender.com/api/getImageFromBackend/${object}`;
     const fileUri = FileSystem.documentDirectory + `${object}.png`;
     try {
       const { uri: localUri } = await FileSystem.downloadAsync(uri, fileUri);
@@ -60,11 +60,13 @@ export default function WikiScreen() {
   };
 
   return (
-    <ImageBackground
-      source={require("../../assets/images/headerDestello.gif")}
-      style={styles.background}
-      imageStyle={{ ...styles.image, transform: [{ rotate: "180deg" }] }}
-    >
+    <>
+      <ImageBackground
+        source={require("../../assets/images/headerDestello.gif")}
+        style={styles.background}
+        imageStyle={{ ...styles.image, transform: [{ rotate: "180deg" }] }}
+      >
+      </ImageBackground>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
           <Text style={styles.title}>Wiki</Text>
@@ -267,23 +269,21 @@ export default function WikiScreen() {
           </View>
         </View>
       </ScrollView>
-    </ImageBackground>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   background: {
-    flex: 1,
     width: "100%",
-    height: "100%", // Asegura que el fondo cubra toda la pantalla
+    height: "70%", // Asegura que el fondo cubra toda la pantalla
+    position: "absolute",
   },
   scrollContainer: {
-    flexGrow: 1,
     paddingBottom: 50,
-    paddingTop: 150, // Asegura espacio para el título
+    paddingTop: 100, // Asegura espacio para el título
   },
   container: {
-    flex: 1,
     alignItems: "flex-start",
     marginLeft: 20,
   },
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 5,
     marginTop: 5,
-    marginBottom: 10,
+    marginBottom: 30,
     alignSelf: "flex-start",
   },
   buttonText: {

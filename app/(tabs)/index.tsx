@@ -32,12 +32,15 @@ export default function HomeScreen() {
   }
 
   return (
-    <ImageBackground
-      source={require("..//../assets/images/headerDestello.gif")}
-      style={styles.background}
-      imageStyle={{ ...styles.image, transform: [{ rotate: "180deg" }] }}
-    >
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+    <>
+      <ImageBackground
+        source={require("..//../assets/images/headerDestello.gif")}
+        style={styles.background}
+        imageStyle={{ ...styles.image, transform: [{ rotate: "180deg" }] }}
+      >
+
+      </ImageBackground>
+      <ScrollView scrollEnabled contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
           <Image
             source={require("../../assets/images/naicaLogo.png")}
@@ -63,17 +66,15 @@ export default function HomeScreen() {
           <Comentarios />
         </View>
       </ScrollView>
-    </ImageBackground>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   background: {
     width: "100%",
-    height: "100%", // Make the background cover the entire screen
+    height: "70%", // Make the background cover the entire screen
     position: "absolute",
-    top: 0,
-    left: 0,
   },
   image: {
     opacity: 0.5, // 50% opacity for headerDestello
