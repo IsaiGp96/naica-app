@@ -1,129 +1,191 @@
-import { Image, Platform, StyleSheet } from "react-native";
-
-import { Collapsible } from "@/components/Collapsible";
-import { ExternalLink } from "@/components/ExternalLink";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import { IconSymbol } from "@/components/ui/IconSymbol";
+import { DynamicTable } from "@/components/DynamicTable";
+import { Ionicons } from "@expo/vector-icons";
+import * as SplashScreen from "expo-splash-screen";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import {
+  ActivityIndicator,
+  ImageBackground,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import useFonts from "../../hooks/useFonts";
 
 export default function TabTwoScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#000000", dark: "#000000" }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
+  const fontsLoaded = useFonts();
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [showScrollToTop, setShowScrollToTop] = useState<boolean>(false);
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  // Función para obtener los datos de la API sin caché
+  const fetchData = useCallback(async () => {
+    try {
+      console.log("Iniciando petición a la API");
+      const response = await fetch(
+        `https://backpwa-a0yz.onrender.com/api/getDataFromFirebase?timestamp=${new Date().getTime()}`,
+        { cache: "no-store" }
+      );
+      if (!response.ok) {
+        throw new Error("Error al obtener los datos");
       }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
-      <ThemedText>
-        This app includes example code to help you get started.
-      </ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          and{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{" "}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the
-          web version, press <ThemedText type="defaultSemiBold">w</ThemedText>{" "}
-          in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the{" "}
-          <ThemedText type="defaultSemiBold">@2x</ThemedText> and{" "}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to
-          provide files for different screen densities
-        </ThemedText>
-        <Image
-          source={require("@/assets/images/react-logo.png")}
-          style={{ alignSelf: "center" }}
-        />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText>{" "}
-          to see how to load{" "}
-          <ThemedText style={{ fontFamily: "SpaceMono" }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{" "}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook
-          lets you inspect what the user's current color scheme is, and so you
-          can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{" "}
-          <ThemedText type="defaultSemiBold">
-            components/HelloWave.tsx
-          </ThemedText>{" "}
-          component uses the powerful{" "}
-          <ThemedText type="defaultSemiBold">
-            react-native-reanimated
-          </ThemedText>{" "}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The{" "}
-              <ThemedText type="defaultSemiBold">
-                components/ParallaxScrollView.tsx
-              </ThemedText>{" "}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+      const json = await response.json();
+      console.log("Datos actualizados:", json);
+      // Filtra cada elemento para ignorar el campo "id"
+      const filteredData = json.map((item: any) => {
+        const { id, ...rest } = item;
+        return rest;
+      });
+      setData(filteredData);
+      setError(null);
+    } catch (err: any) {
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
+
+  // Oculta la splash screen cuando se cargan las fuentes
+  useEffect(() => {
+    const prepare = async () => {
+      if (fontsLoaded) {
+        await SplashScreen.hideAsync();
+      }
+    };
+    prepare();
+  }, [fontsLoaded]);
+
+  // Carga inicial de datos
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  // Función de pull-to-refresh
+  const onRefresh = async () => {
+    console.log("onRefresh ejecutado");
+    setRefreshing(true);
+    await fetchData();
+  };
+
+  // Detecta el scroll para mostrar el botón "scroll to top"
+  const handleScroll = (event: any) => {
+    const yOffset = event.nativeEvent.contentOffset.y;
+    setShowScrollToTop(yOffset > 200);
+  };
+
+  const scrollToTop = () => {
+    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+  };
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  return (
+    <>
+      <ImageBackground
+        source={require("../../assets/images/headerDestello.gif")}
+        style={styles.background}
+        imageStyle={{ ...styles.image, transform: [{ rotate: "180deg" }] }}
+      >
+      </ImageBackground>
+        <View style={styles.container}>
+          <Text style={styles.text}>Stats</Text>
+          <View style={styles.separator} />
+          <View style={styles.dataContainer}>
+            {loading ? (
+              <ActivityIndicator size="large" color="#fff" />
+            ) : (
+              <View style={{ flex: 1 }}>
+                <ScrollView
+                  ref={scrollViewRef}
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                      tintColor="#000" // Color para iOS
+                      colors={["#000"]} // Color para Android
+                    />
+                  }
+                  onScroll={handleScroll}
+                  scrollEventThrottle={16}
+                  alwaysBounceVertical={true}
+                  contentContainerStyle={{ flexGrow: 1 }}
+                >
+                  {error && <Text style={styles.errorText}>{error}</Text>}
+                  <DynamicTable jsonData={data} />
+                </ScrollView>
+                {showScrollToTop && (
+                  <TouchableOpacity
+                    style={styles.scrollToTop}
+                    onPress={scrollToTop}
+                  >
+                    <Ionicons name="arrow-up" size={24} color="#000" />
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
+          </View>
+        </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: "#808080",
-    bottom: -90,
-    left: -35,
+  background: {
+    width: "100%",
+    height: "70%", // se ajusta para que la tabla se vea en vertical completa
     position: "absolute",
+    top: 0,
+    left: 0,
   },
-  titleContainer: {
-    flexDirection: "row",
-    gap: 8,
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  text: {
+    color: "#fff",
+    fontSize: 38,
+    fontFamily: "MyCustomFont",
+    position: "absolute",
+    top: 115,
+    left: 30,
+  },
+  image: {
+    opacity: 0.5,
+  },
+  separator: {
+    width: "85%",
+    height: 1,
+    backgroundColor: "gray",
+    marginTop: 15,
+    position: "absolute",
+    top: 155,
+    left: 30,
+  },
+  dataContainer: {
+    flex: 1,
+    width: "95%",
+    marginTop: 200,
+    backgroundColor: "transparent",
+  },
+  scrollToTop: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#fff",
+    borderRadius: 25,
+    padding: 10,
+  },
+  errorText: {
+    color: "red",
+    textAlign: "center",
+    marginBottom: 10,
   },
 });
